@@ -207,17 +207,24 @@ node dev-data/data/import-dev-data.js --delete
 
 There are no automated test suites in this repo. You can test manually with **Postman**, **Insomnia**, or **curl**.
 
+**Base URL (local):** `http://localhost:3000`  
+**Base URL (live):** `https://natours-api-1-170u.onrender.com`
+
+In all examples below, replace `{URL}` with either the local or live base URL. For example:
+- Local: `GET {URL}/api/v1/tours` → `GET http://localhost:3000/api/v1/tours`
+- Live: `GET {URL}/api/v1/tours` → `GET https://natours-api-1-170u.onrender.com/api/v1/tours`
+
 ### 1. Health / Overview
 
-- **Overview page (HTML):** `GET http://localhost:3000/`
-- **Tour by slug (HTML):** `GET http://localhost:3000/tour/the-forest-hiker` (slug depends on seeded data)
+- **Overview page (HTML):** `GET {URL}/`
+- **Tour by slug (HTML):** `GET {URL}/tour/the-forest-hiker` (slug depends on seeded data)
 
 ### 2. Tours (Public)
 
 **Get all tours** (with optional query params):
 
 ```http
-GET http://localhost:3000/api/v1/tours
+GET {URL}/api/v1/tours
 ```
 
 Examples: `?limit=5`, `?sort=price`, `?fields=name,price,difficulty`, `?page=2&limit=10`, `?difficulty=easy`, `?price[gte]=100&price[lte]=500`
@@ -225,31 +232,31 @@ Examples: `?limit=5`, `?sort=price`, `?fields=name,price,difficulty`, `?page=2&l
 **Top 5 cheap:**
 
 ```http
-GET http://localhost:3000/api/v1/tours/top-5-cheap
+GET {URL}/api/v1/tours/top-5-cheap
 ```
 
 **Tour stats:**
 
 ```http
-GET http://localhost:3000/api/v1/tours/tour-stats
+GET {URL}/api/v1/tours/tour-stats
 ```
 
 **Single tour by ID:**
 
 ```http
-GET http://localhost:3000/api/v1/tours/<tourId>
+GET {URL}/api/v1/tours/<tourId>
 ```
 
 **Tours within radius** (e.g. 400 km from lat/lng, km):
 
 ```http
-GET http://localhost:3000/api/v1/tours/tours-within/400/center/40,-45/unit/km
+GET {URL}/api/v1/tours/tours-within/400/center/40,-45/unit/km
 ```
 
 **Distances from a point:**
 
 ```http
-GET http://localhost:3000/api/v1/tours/distances/40,-45/unit/km
+GET {URL}/api/v1/tours/distances/40,-45/unit/km
 ```
 
 ### 3. Auth & Users
@@ -257,7 +264,7 @@ GET http://localhost:3000/api/v1/tours/distances/40,-45/unit/km
 **Signup:**
 
 ```http
-POST http://localhost:3000/api/v1/users/signup
+POST {URL}/api/v1/users/signup
 Content-Type: application/json
 
 {
@@ -273,7 +280,7 @@ Response includes `token`; use it in later requests.
 **Login:**
 
 ```http
-POST http://localhost:3000/api/v1/users/login
+POST {URL}/api/v1/users/login
 Content-Type: application/json
 
 {
@@ -287,7 +294,7 @@ Use the returned `token` as: `Authorization: Bearer <token>`.
 **Forgot password:**
 
 ```http
-POST http://localhost:3000/api/v1/users/forgotPassword
+POST {URL}/api/v1/users/forgotPassword
 Content-Type: application/json
 
 { "email": "you@example.com" }
@@ -298,7 +305,7 @@ Sends reset email (requires EMAIL_* in `config.env`).
 **Reset password** (token from email):
 
 ```http
-PATCH http://localhost:3000/api/v1/users/resetPassword/<resetToken>
+PATCH {URL}/api/v1/users/resetPassword/<resetToken>
 Content-Type: application/json
 
 {
@@ -310,14 +317,14 @@ Content-Type: application/json
 **Get current user** (protected):
 
 ```http
-GET http://localhost:3000/api/v1/users/me
+GET {URL}/api/v1/users/me
 Authorization: Bearer <token>
 ```
 
 **Update password** (protected):
 
 ```http
-PATCH http://localhost:3000/api/v1/users/updateMyPassword
+PATCH {URL}/api/v1/users/updateMyPassword
 Authorization: Bearer <token>
 Content-Type: application/json
 
@@ -335,7 +342,7 @@ Use a user with role `admin` or `lead-guide` (set in DB) and send the JWT:
 **Create tour:**
 
 ```http
-POST http://localhost:3000/api/v1/tours
+POST {URL}/api/v1/tours
 Authorization: Bearer <token>
 Content-Type: application/json
 ```
@@ -345,15 +352,15 @@ Body: tour object with `name`, `duration`, `maxGroupSize`, `difficulty`, `price`
 **Update / delete tour:**
 
 ```http
-PATCH http://localhost:3000/api/v1/tours/<tourId>
-DELETE http://localhost:3000/api/v1/tours/<tourId>
+PATCH {URL}/api/v1/tours/<tourId>
+DELETE {URL}/api/v1/tours/<tourId>
 Authorization: Bearer <token>
 ```
 
 **Monthly plan** (admin/guide/lead-guide):
 
 ```http
-GET http://localhost:3000/api/v1/tours/monthly-plan/2025
+GET {URL}/api/v1/tours/monthly-plan/2025
 Authorization: Bearer <token>
 ```
 
@@ -362,13 +369,13 @@ Authorization: Bearer <token>
 **List reviews for a tour:**
 
 ```http
-GET http://localhost:3000/api/v1/tours/<tourId>/reviews
+GET {URL}/api/v1/tours/<tourId>/reviews
 ```
 
 **Create review** (logged-in user):
 
 ```http
-POST http://localhost:3000/api/v1/tours/<tourId>/reviews
+POST {URL}/api/v1/tours/<tourId>/reviews
 Authorization: Bearer <token>
 Content-Type: application/json
 
@@ -378,8 +385,8 @@ Content-Type: application/json
 **Update / delete own review** (user or admin):
 
 ```http
-PATCH http://localhost:3000/api/v1/tours/<tourId>/reviews/<reviewId>
-DELETE http://localhost:3000/api/v1/tours/<tourId>/reviews/<reviewId>
+PATCH {URL}/api/v1/tours/<tourId>/reviews/<reviewId>
+DELETE {URL}/api/v1/tours/<tourId>/reviews/<reviewId>
 Authorization: Bearer <token>
 ```
 
